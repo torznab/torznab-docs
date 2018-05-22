@@ -1,0 +1,19 @@
+
+.. role:: flag
+
+.. role:: xml(code)
+    :language: xml
+
+.. |newznab| replace:: :flag:`newznab`
+.. |torznab| replace:: :flag:`torznab`
+
+.. |br| raw:: html
+
+    <br/>
+
+.. |SHALL| replace:: *shall*
+.. |MUST| replace:: *must*
+.. |SHOULD| replace:: *should*
+.. |MAY| replace:: *may*
+
+
