@@ -41,5 +41,14 @@ gulp.task('watch', ['build', 'serve'], function() {
   gulp.watch('./source/_static/css/*.less', ['convert-less']);
 });
 
+gulp.task('clean', function() {
+
+});
+
+gulp.task('publish', ['clean', 'build'], function() {
+  return gulp.src('./build/html/**/*')
+             .pipe(gulp.dest('./publish/torznab.github.io/spec-1.3-draft'));
+});
+
 gulp.task('default', ['build']);
 gulp.task('init', [])
