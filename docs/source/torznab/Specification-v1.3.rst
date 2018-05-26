@@ -149,49 +149,49 @@ Caps Format
 
 .. example::
 
-  .. code-block:: xml
+   .. code-block:: xml
 
-    <?xml version="1.0" encoding="UTF-8"?>
-    <caps>
-        <server version="1.1" title="..." strapline="..."
-                email="..." url="http://indexer.local/"
-                image="http://indexer.local/content/banner.jpg" />
-        <limits max="100" default="50" />
-        <retention days="400" />
-        <registration available="yes" open="yes" />
+   <?xml version="1.0" encoding="UTF-8"?>
+   <caps>
+      <server version="1.1" title="..." strapline="..."
+            email="..." url="http://indexer.local/"
+            image="http://indexer.local/content/banner.jpg" />
+      <limits max="100" default="50" />
+      <retention days="400" />
+      <registration available="yes" open="yes" />
 
-        <searching>
-            <search available="yes" supportedParams="q" />
-            <tv-search available="yes" supportedParams="q,rid,tvdbid,season,ep" />
-            <movie-search available="no" supportedParams="q,imdbid,genre" />
-            <audio-search available="no" supportedParams="q" />
-            <book-search available="no" supportedParams="q" />
-        </searching>
+      <searching>
+         <search available="yes" supportedParams="q" />
+         <tv-search available="yes" supportedParams="q,rid,tvdbid,season,ep" />
+         <movie-search available="no" supportedParams="q,imdbid,genre" />
+         <audio-search available="no" supportedParams="q" />
+         <book-search available="no" supportedParams="q" />
+      </searching>
 
-        <categories>
-            <category id="2000" name="Movies">
-                <subcat id="2010" name="Foreign" />
-            </category>
-            <category id="5000" name="TV">
-                <subcat id="5040" name="HD" />
-                <subcat id="5070" name="Anime" />
-            </category>
-        </categories>
+      <categories>
+         <category id="2000" name="Movies">
+            <subcat id="2010" name="Foreign" />
+         </category>
+         <category id="5000" name="TV">
+            <subcat id="5040" name="HD" />
+            <subcat id="5070" name="Anime" />
+         </category>
+      </categories>
 
-        <groups>
-            <group id="1" name="alt.binaries...." description="..." lastupdate="..." />
-        </groups>
+      <groups>
+         <group id="1" name="alt.binaries...." description="..." lastupdate="..." />
+      </groups>
 
-        <genres>
-            <genre id="1" categoryid="5000" name="Kids" />
-        </genres>
+      <genres>
+         <genre id="1" categoryid="5000" name="Kids" />
+      </genres>
 
-        <tags>
-            <tag name="anonymous" description="Uploader is anonymous" />
-            <tag name="trusted" description="Uploader has high reputation" />
-            <tag name="internal" description="Uploader is an internal release group" />
-        </tags>
-    </caps>
+      <tags>
+         <tag name="anonymous" description="Uploader is anonymous" />
+         <tag name="trusted" description="Uploader has high reputation" />
+         <tag name="internal" description="Uploader is an internal release group" />
+      </tags>
+   </caps>
 
 =================   =======================================================
 server              Information about the server itself, all attributes are free to be changed by the indexer.
@@ -244,6 +244,7 @@ These predefined attributes are optional except for the `size` and `category` at
       ====================  ===================  =======  =============
       size                  all                  integer  Size in bytes
       category              all                  integer  Category id. May occur multiple times.
+      tag                   all                  string   |torznab| Individual tag. May occur multiple times.
       guid                  all                  string   Unique release guid.
       files                 all                  integer  Number of files in the release
       poster                all                  string   |newznab| NNTP poster (eg. ``yenc@power-poster``) |br| 
@@ -317,7 +318,7 @@ Client Implementation Guidelines
 Service Implementation Guidelines
 =================================
 
-These guidelines aim to eliminate any ambiguity in the expected behavior of the service implementation. It also elaborates on common pitfalls for service implementations.
+These guidelines aim to eliminate ambiguity in the expected behavior of the service implementation. It also describes common pitfalls for service implementations.
 Service implementations may deviate from these guidelines and as such clients should not assume services to conform.
 
 Parameters
@@ -330,7 +331,7 @@ The service |SHALL| verify for each parameter whether the value is within the ac
 'cat' parameter
 ~~~~~~~~~~~~~~~
 
-The `cat` parameter is a comma separated list of categories for which the user wishes to receive the results.
+The `cat` parameter is a comma separated list of categories for which the client wishes to receive the results.
 The service |SHOULD| fully implement this query parameter.
 
 The `cat` parameter |MUST| be verified to contain a comma separated list of integer numbers. For example using the :regexp:`^\d+(,\d+)*$` regular expression. If the parameter is invalid, then the |error-201| |MUST| be returned.
@@ -339,7 +340,7 @@ If the `cat` parameter is not included in the query sent by the client, the serv
 
 Unknown categories |MUST| be silently ignored, if all categories specified by the `cat` parameter are unknown then the service |SHALL| return an empty result set.
 
-The service |SHALL| only return an item only once if it exists in multiple specified categories.
+The service |SHALL| return an item only once if it exists in multiple specified categories.
 
 .. example::
     ``cat=4030,5070,1234`` returns results that exist in category 4030 and/or 5070. 1234, being an unknown category, is ignored.
@@ -381,7 +382,7 @@ The default and maximum value for `limit` is specified by the :ref:`capabilities
 'tag' parameter
 ~~~~~~~~~~~~~~~
 
-Added to |torznab| in version 1.1.
+Added to |torznab| in version 1.3.
 
 The service |MAY| implement the `tag` parameter, if it does then the `supportedParams` attribute in the :ref:`capabilities` |MUST| include 'tag'.
 
